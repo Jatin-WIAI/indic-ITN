@@ -1,7 +1,7 @@
 # Indic ITN Library
 
 ## About
-<p>This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs. </p>
+This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs.
 
 It can handel text in different accents and also it can handel special words like `देढ` and `ढाई`. 
 
