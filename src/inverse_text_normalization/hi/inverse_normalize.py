@@ -212,7 +212,7 @@ def inverse_normalize_nemo(texts: List[str], verbose=False) -> List[str]:
     Returns converted input strings
     """
     res = []
-    for input in tqdm(texts):
+    for input in texts:
         try:
             text = inverse_normalize(input, verbose=verbose)
         except:
