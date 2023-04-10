@@ -1,7 +1,16 @@
 # Indic ITN Library
 
 ## About
-<p>This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs. </p>
+This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs.
+
+For Hindi, it can handel text in different accents and also it can handel special words like `देढ` and `ढाई`. 
+
+Some examples for `hindi`
+```
+देढ लाख एकर जमीन है --> 150000 एकर जमीन है
+साढ़े छः सौ एकड़ जमीन --> 650 एकड़ जमीन
+ढाईसो एकर जमीन --> 250 एकड़ जमीन
+```
 
 ## Installation Instructions 
 
@@ -14,22 +23,6 @@ pip install -e .
 ```
 
 ## Usage
-
-Currently (v 2.0.6) we are supporting the following languages:
-- Punctuation:
-  - Hindi ('hi')
-  - English ('en')
-  - Gujarati ('gu')
-  - Telugu ('te')
-  - Marathi ('mr')
-  - Kannada ('kn')
-  - Punjabi ('pa')
-  - Tamil ('ta')
-  - Bengali ('bn')
-  - Odia ('or')
-  - Malayalam ('ml')
-  - Assamese ('as')
-
 
 - Inverse Text Normalization:
   - Hindi
@@ -44,51 +37,6 @@ Currently (v 2.0.6) we are supporting the following languages:
   - Odia
   - Assamese
   - Kannada
-
-
-### Punctuation 
-```buildoutcfg
-from punctuate.punctuate_text import Punctuation
-hindi = Punctuation('hi') #loads model in memory
-english = Punctuation('en')
-gujarati = Punctuation('gu')
-telugu = Punctuation('te')
-marathi = Punctuation('mr')
-kannada = Punctuation('kn')
-punjabi = Punctuation('pa')
-tamil = Punctuation('ta')
-bengali = Punctuation('bn')
-odia = Punctuation('or')
-malayalam = Punctuation('ml')
-assamese = Punctuation('as')
-
-hindi.punctuate_text(["इस श्रेणी में केवल निम्नलिखित उपश्रेणी है", "मेहुल को भारत को सौंप दिया जाए"])
-english.punctuate_text(['how are you', 'great how about you'])
-gujarati.punctuate_text(['નમસ્તે તમે કેમ છો', 'મારે કામે જવુ જ પડશે'])
-telugu.punctuate_text(['రోహిత్ శర్మ విరాట్ కోహ్లీ రాహుల్ మరియు మహమ్మద్ షమీ భారతదేశం కోసం ఆడతారు'])
-marathi.punctuate_text(['पण रामायण हिंदुत्व किंवा आजच्या भारतापुरते मर्यादित नाही तर इंडोनेशिया मलेशिया थायलंड कंबोडिया फिलिपिन्स व्हिएतनाम इत्यादींमध्येही प्रचलित आहे'])
-kannada.punctuate_text(['ಬಿಜೆಪಿ ಕಾಂಗ್ರೆಸ್ ಮತ್ತು ಜನತಾದಳವು ಪ್ರತಿಷ್ಠಿತ ಸ್ಥಾನಗಳನ್ನು ಗಳಿಸಲು ಎಲ್ಲಾ ಹಂತಗಳನ್ನು ಹಿಂತೆಗೆದುಕೊಳ್ಳುತ್ತಿವೆ'])
-punjabi.punctuate_text(['ਸਰੀਰ ਵਿੱਚ ਕੈਲਸ਼ੀਅਮ ਜ਼ਿੰਕ ਆਇਰਨ ਆਦਿ ਪੌਸ਼ਟਿਕ ਤੱਤਾਂ ਦੀ ਕਮੀ ਹੁੰਦੀ ਹੈ'])
-tamil.punctuate_text(['உங்கள் பெயர் என்ன'])
-bengali.punctuate_text(['যে কুড়ুলটা দিয়ে এই ধ্বংসলীলা হয়েছিল সেটিকে নিয়ে কী করা উচিত'])
-odia.punctuate_text(['ମୋର ଅନେକ କଲମ ପେନ୍ସିଲ୍ ନୋଟବୁକ୍ ବହି ଏବଂ ଟେବୁଲ୍ ଅଛି', 'ଭାରତର ରାଜଧାନୀ କ’ଣ'])
-malayalam.punctuate_text(['നിങ്ങൾ എവിടെ താമസിക്കുന്നു', 'ഇന്ന് ഒരു നല്ല ദിവസമാണ്'])
-assamese.punctuate_text(['তোমাৰ ভাল নে'])
-
-----Outputs----
-['इस श्रेणी में केवल निम्नलिखित उपश्रेणी है। ', 'मेहुल को भारत को सौंप दिया जाए। ']
-['How are you?', 'Great, how about you?']
-['નમસ્તે તમે કેમ છો? ', 'મારે કામે જવુ જ પડશે। ']
-['రోహిత్ శర్మ, విరాట్ కోహ్లీ, రాహుల్ మరియు మహమ్మద్ షమీ భారతదేశం కోసం ఆడతారు.']
-['पण रामायण हिंदुत्व किंवा आजच्या भारतापुरते मर्यादित नाही तर इंडोनेशिया, मलेशिया, थायलंड, कंबोडिया, फिलिपिन्स, व्हिएतनाम इत्यादींमध्येही प्रचलित आहे.']
-['ಬಿಜೆಪಿ, ಕಾಂಗ್ರೆಸ್ ಮತ್ತು ಜನತಾದಳವು ಪ್ರತಿಷ್ಠಿತ ಸ್ಥಾನಗಳನ್ನು ಗಳಿಸಲು ಎಲ್ಲಾ ಹಂತಗಳನ್ನು ಹಿಂತೆಗೆದುಕೊಳ್ಳುತ್ತಿವೆ.']
-['ਸਰੀਰ ਵਿੱਚ ਕੈਲਸ਼ੀਅਮ ਜ਼ਿੰਕ, ਆਇਰਨ ਆਦਿ ਪੌਸ਼ਟਿਕ ਤੱਤਾਂ ਦੀ ਕਮੀ ਹੁੰਦੀ ਹੈ।']
-['உங்கள் பெயர் என்ன? ']
-['যে কুড়ুলটা দিয়ে এই ধ্বংসলীলা হয়েছিল, সেটিকে নিয়ে কী করা উচিত?']
-['ମୋର ଅନେକ କଲମ ପେନ୍ସିଲ୍, ନୋଟବୁକ୍ ବହି ଏବଂ ଟେବୁଲ୍ ଅଛି।','ଭାରତର ରାଜଧାନୀ କ’ଣ?']
-['നിങ്ങൾ എവിടെ താമസിക്കുന്നു? ', 'ഇന്ന് ഒരു നല്ല ദിവസമാണ്. ']
-['তোমাৰ ভাল নে? ']
-```
 
 ### Inverse Text Normalization
 ```buildoutcfg
