@@ -7,7 +7,7 @@
 
 ```buildoutcfg
 git clone https://github.com/Open-Speech-EkStep/indic-punct.git
-cd indic-punct
+cd indic-ITN
 bash install.sh
 python setup.py bdist_wheel
 pip install -e .
