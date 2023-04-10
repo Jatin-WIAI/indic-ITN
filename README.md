@@ -3,9 +3,9 @@
 ## About
 This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs.
 
-It can handel text in different accents and also it can handel special words like `देढ` and `ढाई`. 
+For Hindi, it can handel text in different accents and also it can handel special words like `देढ` and `ढाई`. 
 
-Some examples
+Some examples for `hindi`
 ```
 देढ लाख एकर जमीन है --> 150000 एकर जमीन है
 साढ़े छः सौ एकड़ जमीन --> 650 एकड़ जमीन
