@@ -1,7 +1,7 @@
-# Indic Punct Library
+# Indic ITN Library
 
 ## About
-<p>Inverse text normalization (ITN) is a part of the Automatic Speech Recognition (ASR) post-processing pipeline. ITN is the task of converting the raw spoken output of the ASR model into its written form to improve text readability. We currently only handle numbers as a part of our ITN pipeline, and have developed and open-sourced WFST (weighted finite state transducer) based ITN support for 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. </p>
+<p>This is a fork of [indic-punct](https://github.com/Open-Speech-EkStep/indic-punct) repository. This library handels the `Number Normalization` much better than indic-punct.  It supports. 11 Indic languages -Hindi, Gujarati, Telugu, Marathi, Punjabi, Tamil, Bengali, Malayalam, Odia, Assamese, Kannada, using NVIDIA’s NEMO toolkit. This library also supports `Date` type inputs. </p>
 
 ## Installation Instructions 
 
@@ -45,7 +45,6 @@ Currently (v 2.0.6) we are supporting the following languages:
   - Assamese
   - Kannada
 
-We are planning to add other Indic languages. 
 
 ### Punctuation 
 ```buildoutcfg
@@ -122,25 +121,4 @@ inverse_normalize_text(['ನನ್ನ ಕೈಯಲ್ಲಿ ಐದು ಡಾಲ�
 ['ମୋ ହାତରେ $ 5 ଅଛି', 'ମୋ ହାତରେ ₹ 500 ଅଛି', 'ମୋ ହାତରେ € 700 ଅଛି']
 ['মই 10 বাকচ মিঠাই বিতৰণ কৰিলো', '99,05,00,822']
 ['ನನ್ನ ಕೈಯಲ್ಲಿ $ 5 ಇದೆ', 'ನನ್ನ ಬ್ಯಾಗ್ ನಲ್ಲಿ ₹ 500 ಪೆನ್ನಿದೆ', 'ನನ್ನ ಖಾತೆಯಲ್ಲಿ € 5,00,00,000 ಇದೆ']
-```
-
-## Citation 
-```
-@misc{https://doi.org/10.48550/arxiv.2203.16825,
-  doi = {10.48550/ARXIV.2203.16825},
-  
-  url = {https://arxiv.org/abs/2203.16825},
-  
-  author = {Gupta, Anirudh and Chhimwal, Neeraj and Dhuriya, Ankur and Gaur, Rishabh and Shah, Priyanshi and Chadha, Harveen Singh and Raghavan, Vivek},
-  
-  keywords = {Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-  
-  title = {indic-punct: An automatic punctuation restoration and inverse text normalization framework for Indic languages},
-  
-  publisher = {arXiv},
-  
-  year = {2022},
-  
-  copyright = {Creative Commons Attribution 4.0 International}
-}
 ```
