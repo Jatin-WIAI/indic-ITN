@@ -265,7 +265,10 @@ def inverse_normalize_numbers(texts: List[str], verbose=False) -> List[str]:
     res = []
     for input in texts:
         try:
+            input= " "+input+" "
+            input = input.replace(" एक ", "  एक  ").replace(" दो ","  दो  ")
             text = inverse_normalize_number(input, verbose=verbose)
+            text = text.lstrip().rstrip()
         except:
             raise Exception
         res.append(text)
