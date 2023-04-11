@@ -73,7 +73,7 @@ def remove_starting_zeros(word, hindi_digits_with_zero):
         word = word[1:]
         
     if all(v == '0' for v in word): # all the digits in num are zero eg: "00000000"
-        word = ''
+        word = '0'
 
     elif word[0] in hindi_digits_with_zero and len(word) > 1:
         if all([digit == "0" for digit in list(word)]):

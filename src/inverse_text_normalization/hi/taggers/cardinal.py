@@ -80,7 +80,8 @@ class CardinalFst(GraphFst):
 
         graph_zero = pynini.string_file(get_abs_path(data_path + "numbers/zero.tsv"))
         graph_tens = pynini.string_file(get_abs_path(data_path + "numbers/tens.tsv"))
-        graph_digit = pynini.string_file(get_abs_path(data_path + "numbers/digit.tsv"))
+        graph_digit = pynini.string_file(get_abs_path(data_path + "numbers/digit.tsv")) | pynini.cross("एक","1") | pynini.cross("दो","2")
+
         order_dict = open(get_abs_path(data_path + "numbers/order_dict.json"), "r")
         order_dict = json.load(order_dict)
         graph_hundred = get_graph(order_dict["hundred"]["keys"],"00")
@@ -167,7 +168,9 @@ class CardinalFst(GraphFst):
             special_words_graph,
             fraction_word_graph,
             higher_order_fraction_graphs_1,
-            higher_order_fraction_graphs_2
+            higher_order_fraction_graphs_2,
+            graph_digit,
+            graph_tens
         )
 
         fst_crore = fst+graph_crore # handles words like चार हज़ार करोड़
