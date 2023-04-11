@@ -73,3 +73,41 @@ class ClassifyFst(GraphFst):
         )
 
         self.fst = graph.optimize()
+
+
+class ClassifyNumberFst(GraphFst):
+    """
+    Composes other classfier grammars. This class will be compiled and exported to thrax FAR. 
+    """
+
+    def __init__(self):
+        super().__init__(name="tokenize_and_classify", kind="classify")
+
+        cardinal_graph_fst = CardinalFst()
+        cardinal = cardinal_graph_fst.fst
+
+        ordinal_graph_fst = OrdinalFst(cardinal_graph_fst)
+        ordinal = ordinal_graph_fst.fst
+
+        decimal_graph_fst = DecimalFst(cardinal_graph_fst)
+        decimal = decimal_graph_fst.fst
+
+        measure = MeasureFst(cardinal_graph_fst, decimal_graph_fst).fst
+
+        word = WordFst().fst
+
+        money = MoneyFst(cardinal_graph_fst, decimal_graph_fst).fst
+
+        whitelist = WhiteListFst().fst
+
+        graph = (
+            pynutil.add_weight(whitelist, 1.01)
+            | pynutil.add_weight(decimal, 1.1)
+            | pynutil.add_weight(measure, 1.1)
+            | pynutil.add_weight(cardinal, 1.1)
+            | pynutil.add_weight(ordinal, 1.1)
+            | pynutil.add_weight(money, 1.1)
+            | pynutil.add_weight(word, 100)
+        )
+
+        self.fst = graph.optimize()

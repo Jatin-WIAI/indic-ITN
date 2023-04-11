@@ -72,7 +72,7 @@ class DecimalFst(GraphFst):
         graph_decimal = pynini.closure(graph_decimal + delete_space) + graph_decimal
         self.graph = graph_decimal
 
-        point = pynutil.delete("दशमलव")
+        point = pynutil.delete("दशमलव") | pynutil.delete("दसमलव") | pynutil.delete("दशमलो")
 
         optional_graph_negative = pynini.closure(
             pynutil.insert("negative: ") + pynini.cross("minus", "\"true\"") + delete_extra_space, 0, 1

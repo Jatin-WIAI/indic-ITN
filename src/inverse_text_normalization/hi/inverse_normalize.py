@@ -23,7 +23,7 @@ from typing import List
 
 # exec(f"from {lang_taggers}.tokenize_and_classify_final import ClassifyFinalFst")
 
-from inverse_text_normalization.hi.taggers.tokenize_and_classify_final import ClassifyFinalFst
+from inverse_text_normalization.hi.taggers.tokenize_and_classify_final import ClassifyFinalFst, ClassifyNumberFinalFst
 from inverse_text_normalization.hi.token_parser import PRESERVE_ORDER_KEY, TokenParser
 from inverse_text_normalization.hi.verbalizers.verbalize_final import VerbalizeFinalFst
 from tqdm import tqdm
@@ -31,7 +31,8 @@ from tqdm import tqdm
 try:
     import pynini
 
-    tagger = ClassifyFinalFst()
+    tagger_general = ClassifyFinalFst()
+    tagger_number = ClassifyNumberFinalFst()
     verbalizer = VerbalizeFinalFst()
     parser = TokenParser()
 
@@ -106,7 +107,7 @@ def generate_permutations(tokens: List[dict]):
     return _helper("", tokens, 0)
 
 
-def find_tags(text: str) -> 'pynini.FstLike':
+def find_tags(text: str, tagger) -> 'pynini.FstLike':
     """
     Given text use tagger Fst to tag text
 
@@ -171,10 +172,42 @@ def inverse_normalize(text: str, verbose: bool) -> str:
     """
 
     text = pynini.escape(text)
-    tagged_lattice = find_tags(text)
+    tagged_lattice = find_tags(text, tagger_general)
     # print("tagged lattice is ", tagged_lattice)
     tagged_text = select_tag(tagged_lattice)
     parser(tagged_text)
+    tokens = parser.parse()
+    tags_reordered = generate_permutations(tokens)
+    for tagged_text in tags_reordered:
+        tagged_text = pynini.escape(tagged_text)
+        # print("tagged text is ", tagged_text)
+        verbalizer_lattice = find_verbalizer(tagged_text)
+        if verbalizer_lattice.num_states() == 0:
+            continue
+        output = select_verbalizer(verbalizer_lattice)
+        if verbose:
+            print(output)
+        return output
+    raise ValueError()
+
+def inverse_normalize_number(text: str, verbose: bool) -> str:
+    """
+    main function. normalizes spoken tokens in given text to its written form
+        e.g. twelve kilograms -> 12 kg
+
+    Args:
+        text: string that may include semiotic classes.
+
+    Returns: written form
+    """
+
+    text = pynini.escape(text)
+    # print(text)
+    tagged_lattice = find_tags(text, tagger_number)
+    # print("tagged lattice is ", tagged_lattice)
+    tagged_text = select_tag(tagged_lattice)
+    parser(tagged_text)
+    # print(tagged_text)
     tokens = parser.parse()
     tags_reordered = generate_permutations(tokens)
     for tagged_text in tags_reordered:
@@ -220,10 +253,29 @@ def inverse_normalize_nemo(texts: List[str], verbose=False) -> List[str]:
         res.append(text)
     return res
 
+def inverse_normalize_numbers(texts: List[str], verbose=False) -> List[str]:
+    """
+    NeMo inverse text normalizer 
+
+    Args:
+        texts: input strings
+
+    Returns converted input strings
+    """
+    res = []
+    for input in texts:
+        try:
+            text = inverse_normalize_number(input, verbose=verbose)
+        except:
+            raise Exception
+        res.append(text)
+    return res
+
 
 INVERSE_NORMALIZERS = {
     "identity": inverse_normalize_identity,
     "nemo": inverse_normalize_nemo,
+    "numbers": inverse_normalize_numbers,
 }
 
 

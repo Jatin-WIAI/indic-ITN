@@ -154,6 +154,30 @@ def inverse_normalize_text(text_list, verbose=False):
 
     return astr_list
 
+def inverse_normalize_numbers_in_text(text_list, verbose=False):
+    # lang = lang
+    # if lang == 'en':
+    #
+    #     sent_updated = InverseNormalizer().normalize_list(text_list)
+    #     return sent_updated
+
+    # else:
+    inverse_normalizer = INVERSE_NORMALIZERS['numbers']
+    hindi_digits_with_zero = '0123456789'
+    inverse_normalizer_prediction = inverse_normalizer(text_list, verbose=verbose)
+    astr_list = []
+    comma_sep_num_list = []
+    inverse_normalizer_prediction = [sent.replace('\r', '') for sent in inverse_normalizer_prediction]
+    for sent in inverse_normalizer_prediction:
+        sent = convert_higher_order_fractions(sent)
+        trimmed_sent = ' '.join(
+            [remove_starting_zeros(word, hindi_digits_with_zero) for word in sent.split(' ')])
+        astr_list.append(trimmed_sent)
+        # comma_sep_num_list.append(
+        #     ' '.join([indian_format(word, hindi_digits_with_zero) for word in trimmed_sent.split(' ')]))
+
+    return astr_list
+
 
 if __name__ == "__main__":
     args = parse_args()

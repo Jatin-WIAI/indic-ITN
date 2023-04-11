@@ -20,6 +20,7 @@ lang_taggers = 'inverse_text_normalization.hi.taggers'
 from inverse_text_normalization.hi.graph_utils import GraphFst, delete_extra_space, delete_space
 exec(f"from {lang_taggers}.punctuation import PunctuationFst")
 exec(f"from {lang_taggers}.tokenize_and_classify import ClassifyFst")
+exec(f"from {lang_taggers}.tokenize_and_classify import ClassifyNumberFst")
 
 try:
     import pynini
@@ -40,6 +41,27 @@ class ClassifyFinalFst(GraphFst):
         super().__init__(name="tokenize_and_classify_final", kind="classify")
 
         classify = ClassifyFst().fst
+        punct = PunctuationFst().fst
+        token = pynutil.insert("tokens { ") + classify + pynutil.insert(" }")
+        token_plus_punct = (
+            pynini.closure(punct + pynutil.insert(" ")) + token + pynini.closure(pynutil.insert(" ") + punct)
+        )
+
+        graph = token_plus_punct + pynini.closure(delete_extra_space + token_plus_punct)
+        graph = delete_space + graph + delete_space
+
+        self.fst = graph.optimize()
+
+class ClassifyNumberFinalFst(GraphFst):
+    """
+    Final FST that tokenizes an entire sentence
+        e.g. its twelve thirty now. -> tokens { name: "its" } tokens { time { hours: "12" minutes: "30" } } tokens { name: "now" } tokens { name: "." pause_length: "PAUSE_LONG phrase_break: true type: PUNCT" }
+    """
+
+    def __init__(self):
+        super().__init__(name="tokenize_and_classify_final", kind="classify")
+
+        classify = ClassifyNumberFst().fst
         punct = PunctuationFst().fst
         token = pynutil.insert("tokens { ") + classify + pynutil.insert(" }")
         token_plus_punct = (
