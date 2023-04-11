@@ -115,6 +115,10 @@ def add_five_on_last_zero(text):
     if len(text_list)==1:
         text_list.append('.5')
         return ''.join(text_list)
+    if len(text_list)==2:
+        if text_list[-1]=='0' and text_list[0]!='0':
+            text_list.append('.5')
+            return ''.join(text_list)
     return text
 
 def convert_higher_order_fractions(text):
