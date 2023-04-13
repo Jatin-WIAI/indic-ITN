@@ -4,12 +4,12 @@ with open("README.md", 'r') as f:
     long_description = f.read()
 
 setup(
-    name="indic-punct",
-    version='2.0.7',
+    name="indic-itn",
+    version='1.0.1',
     description='Punctuation and inverse text normalization for Indic languages and English',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/Open-Speech-EkStep/indic-punct',
+    url='https://github.com/Jatin-WIAI/indic-ITN',
     keywords='nlp, punctuation, Indic languages, deep learning',
     package_dir={'': 'src'},
     packages=find_packages(where='src'),
@@ -30,7 +30,8 @@ setup(
         'tokenizers==0.9.4',
         'torchvision==0.8.2',
         'transformers==4.0.1',
-        'indic-nlp-library==0.81'
+        'indic-nlp-library==0.81',
+        'pynini==2.1.4'
     ],
     classifiers=[
         # How mature is this project? Common values are
