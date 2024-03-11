@@ -102,8 +102,55 @@ def indian_format(word, hindi_digits_with_zero):
         return word
 
 
-def inverse_normalize_text(text_list, verbose=False):
+def add_five_on_last_zero(text):
+    # traverse in the string from end to start
+    text_list = list(text)
+    for i in range(len(text_list) - 1, 0, -1):
+        if text_list[i] == '0' and text_list[i-1]!='0' and i!=len(text_list)-1:
+            text_list[i] ='5'
+            return ''.join(text_list)
+        if i==len(text_list)-1 or i==len(text_list)-2:
+            if text_list[i]!='0':
+                text_list.append('.5')
+                return ''.join(text_list)
+    if len(text_list)==1:
+        text_list.append('.5')
+        return ''.join(text_list)
+    if len(text_list)==2:
+        if text_list[-1]=='0' and text_list[0]!='0':
+            text_list.append('.5')
+            return ''.join(text_list)
+    return text
 
+def convert_higher_order_fractions(text):
+    words = [x for x in text.split(' ')]
+    new_text = []
+    i=0
+    while(i<len(words)):
+        if words[i]=="FRACX.75":
+            num = words[i+1]
+            if float(words[i+1])/100 >= 1:
+                num = str(float(words[i+1])-25)
+            else:
+                num = str(float(words[i+1])-0.25)
+            new_text.append(num)
+            i+=1
+        elif words[i]=="FRACX.5":
+            new_text.append(add_five_on_last_zero(words[i+1]))
+            i+=1
+        else:
+            new_text.append(words[i])
+        i+=1
+    return ' '.join(new_text)
+
+def inverse_normalize_text(text_list, verbose=False):
+    # lang = lang
+    # if lang == 'en':
+    #
+    #     sent_updated = InverseNormalizer().normalize_list(text_list)
+    #     return sent_updated
+
+    # else:
     inverse_normalizer = INVERSE_NORMALIZERS['nemo']
     hindi_digits_with_zero = '0123456789'
     inverse_normalizer_prediction = inverse_normalizer(text_list, verbose=verbose)
@@ -111,9 +158,12 @@ def inverse_normalize_text(text_list, verbose=False):
     comma_sep_num_list = []
     inverse_normalizer_prediction = [sent.replace('\r', '') for sent in inverse_normalizer_prediction]
     for sent in inverse_normalizer_prediction:
+        sent = convert_higher_order_fractions(sent)
         trimmed_sent = ' '.join(
             [remove_starting_zeros(word, hindi_digits_with_zero) for word in sent.split(' ')])
         astr_list.append(trimmed_sent)
+        # comma_sep_num_list.append(
+        #     ' '.join([indian_format(word, hindi_digits_with_zero) for word in trimmed_sent.split(' ')]))
 
     return astr_list
 
