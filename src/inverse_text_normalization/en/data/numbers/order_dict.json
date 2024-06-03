@@ -1,0 +1,14 @@
+{
+    "hundred":{
+        "keys":["hundred"]
+    },
+    "thousand":{
+        "keys":["thousand"]
+    },
+    "lakh":{
+        "keys": ["lakh", "lakhs"]
+    },
+    "crore":{
+        "keys": ["crore", "crores"]
+    }
+}

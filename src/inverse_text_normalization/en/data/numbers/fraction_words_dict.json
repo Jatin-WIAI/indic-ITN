@@ -1,0 +1,7 @@
+{
+    "FRAC0.25": ["quarter"],
+    "FRAC0.5": ["half","a half"],
+    "FRAC1.5": ["one and a half", "one and half"],
+    "FRAC2.5":  ["two and a half", "two and half"],
+    "FRACX.5": ["a half", "and half", "half", "and a half"]
+}

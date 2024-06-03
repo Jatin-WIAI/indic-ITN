@@ -1,0 +1,7 @@
+{
+    "0.25": ["quarter"],
+    "0.5": ["half","a half"],
+    "1.0": ["once"],
+    "2.0": ["twice", "double"],
+    "3.0": ["thrice"]
+}
