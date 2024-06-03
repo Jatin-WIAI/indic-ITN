@@ -16,6 +16,7 @@ from argparse import ArgumentParser
 from typing import List
 
 from inverse_text_normalization.en.inverse_normalize import INVERSE_NORMALIZERS
+import re
 
 '''
 Runs denormalization prediction on text data
@@ -85,14 +86,94 @@ def parse_args():
     return parser.parse_args()
 
 
+
+def add_five_on_last_zero(text):
+    # traverse in the string from end to start
+    text_list = list(text)
+    text_list.append('.5')
+    return ''.join(text_list)
+    # for i in range(len(text_list) - 1, 0, -1):
+    #     if text_list[i] == '0' and text_list[i-1]!='0' and i!=len(text_list)-1:
+    #         text_list[i] ='5'
+    #         return ''.join(text_list)
+    #     if i==len(text_list)-1 or i==len(text_list)-2:
+    #         if text_list[i]!='0':
+    #             text_list.append('.5')
+    #             return ''.join(text_list)
+    # if len(text_list)==1:
+    #     text_list.append('.5')
+    #     return ''.join(text_list)
+    # if len(text_list)==2:
+    #     if text_list[-1]=='0' and text_list[0]!='0':
+    #         text_list.append('.5')
+    #         return ''.join(text_list)
+    # return text
+
+def convert_higher_order_fractions(text):
+    words = [x for x in text.split(' ')]
+    new_text = []
+    i=0
+    while(i<len(words)-1):
+
+        if "FRACX.5" in words[i+1]:
+            new_text.append(add_five_on_last_zero(words[i]))
+            i+=1
+        else:
+            new_text.append(words[i])
+        i+=1
+    if i<len(words):
+        new_text.append(words[i])
+    return ' '.join(new_text)
+
+def remove_starting_zeros(word, hindi_digits_with_zero):
+    currency_handled = ['$', '₹']
+    currency = ''
+    if word[0] in currency_handled:
+        currency = word[0]
+        word = word[1:]
+        
+    if all(v == '0' for v in word): # all the digits in num are zero eg: "00000000"
+        word = '0'
+
+    elif word[0] in hindi_digits_with_zero and len(word) > 1:
+        if all([digit == "0" for digit in list(word)]):
+            return "1" + word
+        if '.' in word:
+            if len(word.split('.')[0]) == 1:
+                return word
+        pos_non_zero_nums = [pos for pos, word in enumerate(list(word)) if word != "0"]
+        # print(pos_non_zero_nums, word)
+        first_non_zero_num = min(pos_non_zero_nums)
+        word = word[first_non_zero_num:]
+    if currency:
+        word = currency + ' ' + word
+    return word
+
+
 def inverse_normalize_text(text_list, verbose=False):
+    # lang = lang
+    # if lang == 'en':
+    #
+    #     sent_updated = InverseNormalizer().normalize_list(text_list)
+    #     return sent_updated
+
+    # else:
     inverse_normalizer = INVERSE_NORMALIZERS['nemo']
+    hindi_digits_with_zero = '0123456789'
     inverse_normalizer_prediction = inverse_normalizer(text_list, verbose=verbose)
-    # comma_sep_num_list = []
-    # for sent in inverse_normalizer_prediction:
-    #     comma_sep_num_list.append(
-    #         ' '.join([indian_format(word) for word in sent.split(' ')]))
-    return inverse_normalizer_prediction
+    astr_list = []
+    comma_sep_num_list = []
+    inverse_normalizer_prediction = [sent.replace('\r', '') for sent in inverse_normalizer_prediction]
+    for sent in inverse_normalizer_prediction:
+        sent = convert_higher_order_fractions(sent)
+        trimmed_sent = ' '.join(
+            [remove_starting_zeros(word, hindi_digits_with_zero) for word in sent.split(' ')])
+        astr_list.append(trimmed_sent)
+        # comma_sep_num_list.append(
+        #     ' '.join([indian_format(word, hindi_digits_with_zero) for word in trimmed_sent.split(' ')]))
+
+    return astr_list
+
 
 
 if __name__ == "__main__":

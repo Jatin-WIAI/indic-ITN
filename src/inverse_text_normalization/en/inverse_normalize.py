@@ -206,9 +206,15 @@ def inverse_normalize_nemo(texts: List[str], verbose=False) -> List[str]:
     res = []
     for input in tqdm(texts):
         try:
+            input= " "+input+" dummy"
+            # input = input.replace(" one ", "  one  ").replace(" two ","  two  ")
+            # text = inverse_normalize(input, verbose=verbose)
+            # text = text.lstrip().rstrip()
             text = inverse_normalize(input, verbose=verbose)
-        except:
-            raise Exception
+            text = text.replace("dummy","").strip()
+        except Exception as e:
+            print(f"Exception {e}")
+            # raise Exception
         res.append(text)
     return res
 
